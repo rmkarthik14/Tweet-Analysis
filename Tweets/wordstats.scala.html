@@ -1,0 +1,33 @@
+@*
+ * This template shows the word status of the tweets from the search query
+ * @Author Vivek Haribal
+ * @author Karthik Ramachandran Murugesan
+ * @author Gaganpreet Singh
+ * @author Dilsher Dhami
+ * @version 1.0.0
+ *@
+ 
+@(wordFreq: Map[String, Long]) @main("Word Stats") {
+
+<div class="container">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Word</th>
+				<th>Count</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			@for((word, count) <- wordFreq ){
+			<tr>
+				<td>@word</td>
+				<td>@count</td>
+			</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+}
+

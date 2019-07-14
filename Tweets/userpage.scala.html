@@ -1,0 +1,122 @@
+@import twitter4j.Status
+@import twitter4j.User
+
+@*
+ * This template shows the user profile details and the latest 10 tweets of the user
+ * @Author Vivek Haribal
+ * @author Karthik Ramachandran Murugesan
+ * @author Gaganpreet Singh
+ * @author Dilsher Dhami
+ * @version 1.0.0
+ *@
+
+@(user: User)(tweets: List[Status])
+ 
+
+
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap.min.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/userprofile.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/fontawesome.css")">
+<div class="container">
+	<div class="row">
+		
+    	 <div class="well profile">
+            <div class="col-sm-12">
+                <div style="margin:0;width:100%;">              
+                    <h2>@user.getName()</h2>
+                    <div id="user-info">
+                    <p><strong>Username: </strong>@@@user.getScreenName() </p>
+                    <p><strong>Description: </strong>@user.getDescription() </p>
+                    <p><strong>Joined: </strong> @user.getCreatedAt() </p>
+                    <p><strong>Profile: </strong><a href="@user.getURL()">@user.getURL()</a></p>
+                    </div>
+                    <div id="user-friends-info">
+                        <span class="tags">@user.getStatusesCount() tweets</span> 
+                        <span class="tags">@user.getFriendsCount() following</span>
+                        <span class="tags">@user.getFollowersCount() followers</span>
+                    </div>
+                </div>             
+                
+            </div>            
+            
+    	 </div>                 
+		</div>
+	
+
+
+
+
+ @for( tweet <- tweets){
+ <div id="usertweets">
+ <div class="EmbeddedTweet-tweet">
+<blockquote class="Tweet h-entry js-tweetIdInfo subject expanded" cite="#" data-tweet-id="1021341698734030848" data-scribe="section:subject">
+    <div class="Tweet-header">
+      <a class="TweetAuthor-avatar  Identity-avatar u-linkBlend" data-scribe="element:user_link" href="#" 
+      aria-label="Name and Screen Name"><img class="Avatar Avatar--edge" ></a>
+      
+
+
+<div class="TweetAuthor js-inViewportScribingTarget" data-scribe="component:author">
+  <!-- insert user url --><a class="TweetAuthor-link Identity u-linkBlend" data-scribe="element:user_link" 
+  href="<span id=""></span> 
+  
+    <div class="TweetAuthor-nameScreenNameContainer">
+      <span class="TweetAuthor-decoratedName">
+        <span class="TweetAuthor-name Identity-name customisable-highlight" title="@tweet.getUser.getName" 
+        data-scribe="element:name">@@@user.getScreenName() </span>
+        
+        <span class="TweetAuthor-screenName Identity-screenName" title="profilename" 
+      data-scribe="element:screen_name" dir="ltr">@@@user.getScreenName()  </span>
+      <span>
+      <a href="#">
+      
+      </a>      
+      </span>
+    </div>
+  </a>
+</div>
+
+        <div class="Tweet-brand">
+          <a href="#" data-scribe="element:logo"><span class="FollowButton-bird"><div class="Icon Icon--twitter " 
+          aria-label="View on Twitter" title="View on Twitter" role="presentation"></div></span></a>
+        </div>
+    </div>
+    <div class="Tweet-body e-entry-content" data-scribe="component:tweet">
+      
+      <div class="u-hiddenVisually js-inViewportScribingTarget"></div>
+      <p class="Tweet-text e-entry-title" lang="en" dir="ltr">
+      
+      @for(tweetwords <-  tweet.getText.split(' ')) {
+      	@if(tweetwords!=null && tweetwords.length() > 0 && tweetwords.trim().substring(0, 1) == "#") {
+      		<b><a href="@routes.HomeController.getHashTags(tweetwords)" target="_blank">@tweetwords</a></b>
+      	} else {
+      		@tweetwords
+      	}
+      }
+      
+      </p>
+
+
+
+      <div class="Tweet-metadata dateline">
+        
+
+<a class="u-linkBlend u-url customisable-highlight long-permalink" data-datetime="" 
+data-scribe="element:full_timestamp" href="#">
+
+
+
+<time class="dt-updated" datetime="time here" pubdate="" title="@tweet.getCreatedAt()">@tweet.getCreatedAt()</time></a>
+      </div>
+
+    </div>
+  </blockquote>
+</div>
+</div>
+
+ }
+ </div>
+	<script src="@routes.Assets.versioned("javascripts/jquery-3.2.1.slim.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/popper.min.js")" type="text/javascript"></script>
+	<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>

@@ -1,0 +1,130 @@
+@import twitter4j.Status 
+@(tweetForm: Form[String])(tweetsForWord:Map[Map[String, String], List[Status]])
+
+@*
+ * This template is the home page and takes the string input to search the tweets
+ * @Author Vivek Haribal
+ * @author Karthik Ramachandran Murugesan
+ * @author Gaganpreet Singh
+ * @author Dilsher Dhami
+ * @version 1.0.0
+ *@
+
+@main("tweetForm") {
+<div class="container">
+	<div id="search-bar">
+		<form action="@routes.HomeController.getTweets()" method="POST">
+			<div class="input-group mt-3 mb-3">
+				<input type="text" name="tweetSearch"
+					class="form-control border border-primary"
+					placeholder="Search tweets (for ex: FIFA 2018)" autofocus>
+				<div class="input-group-append">
+					<input class="btn btn-outline-primary" type="submit" value="Go!">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+@if(tweetsForWord != null){
+<div class="container">
+<button id="wordstats-btn" type="button" class="btn btn-light">
+	<a href="@routes.HomeController.getWordStats()">WordStats</a>
+</button>
+
+
+	@for( (word, tweets) <- tweetsForWord ){
+
+	<hr>
+	@for((searchword, sentiment) <- word) {
+
+	<div id="sentiment-display">
+		<h3>@sentiment</h3>
+	</div>
+	} @for((searchword, sentiment) <- word) {
+	
+	
+	<button id="searchword-btn" class="btn btn-light" type="button"
+		data-toggle="collapse" data-target="#collapse-@word"
+		aria-expanded="true" aria-controls="collapse-@word">@searchword</button>
+	}
+	<div class="collapse @if(tweetsForWord.size < 2) {show}"
+		id="collapse-@word">
+		<ul class="list-unstyled">
+			@for(tweet <- tweets) {
+			<div class="EmbeddedTweet-tweet">
+				<blockquote class="Tweet h-entry js-tweetIdInfo subject expanded"
+					cite="#" data-tweet-id="1021341698734030848"
+					data-scribe="section:subject">
+					<div class="Tweet-header">
+						<a class="TweetAuthor-avatar  Identity-avatar u-linkBlend"
+							data-scribe="element:user_link" href="#"
+							aria-label="Name and Screen Name"><img
+							class="Avatar Avatar--edge" data-scribe="element:avatar"></a>
+
+
+
+						<div class="TweetAuthor js-inViewportScribingTarget"
+							data-scribe="component:author">
+							<!-- insert user url -->
+							<a class="TweetAuthor-link Identity u-linkBlend"
+								data-scribe="element:user_link"
+								href="@routes.HomeController.getUserTweets(tweet.getUser().getScreenName())"
+								aria-label="Name and Screen Name">
+								<div class="TweetAuthor-nameScreenNameContainer">
+									<span class="TweetAuthor-decoratedName"> <span
+										class="TweetAuthor-name Identity-name customisable-highlight"
+										title="@tweet.getUser.getName" data-scribe="element:name">@tweet.getUser.getName</span>
+
+										<span class="TweetAuthor-screenName Identity-screenName"
+										title="profilename" data-scribe="element:screen_name"
+										dir="ltr">@@@tweet.getUser().getScreenName() </span> <span>
+											<a href="#"> (@tweet.getUser.getLocation) </a>
+									</span>
+								</div>
+							</a>
+						</div>
+
+						<div class="Tweet-brand">
+							<a href="#" data-scribe="element:logo"><span
+								class="FollowButton-bird"><div
+										class="Icon Icon--twitter " aria-label="View on Twitter"
+										title="View on Twitter" role="presentation"></div></span></a>
+						</div>
+					</div>
+					<div class="Tweet-body e-entry-content"
+						data-scribe="component:tweet">
+
+						<div class="u-hiddenVisually js-inViewportScribingTarget"></div>
+						<p class="Tweet-text e-entry-title" lang="en" dir="ltr">
+
+							@for(tweetwords <- tweet.getText().split(' ')) {
+							@if(tweetwords!=null && tweetwords.length() > 0 &&
+							tweetwords.trim().substring(0, 1) == "#") { <b><a
+								href="@routes.HomeController.getHashTags(tweetwords)"
+								target="_blank">@tweetwords</a></b> } else { @tweetwords } }
+
+						</p>
+
+
+
+						<div class="Tweet-metadata dateline">
+
+
+							<a
+								class="u-linkBlend u-url customisable-highlight long-permalink"
+								data-datetime="@tweet.getCreatedAt()"
+								data-scribe="element:full_timestamp" href="#"> <time
+									class="dt-updated" datetime="time here" pubdate=""
+									title="@tweet.getCreatedAt()">@tweet.getCreatedAt()</time></a>
+						</div>
+					</div>
+				</blockquote>
+			</div>
+			}
+		</ul>
+	</div>
+	}
+</div>
+} }
